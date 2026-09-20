@@ -55,12 +55,17 @@
             /* ── WORD FADE TIMING (slow & smooth) ── */
             --word-fade-duration: 0.65s;
             --word-fade-ease: ease;
+
+            /* ── GLYPH SAFETY PADDING ── */
+            --fold-safe-x: 0.85rem;
+            --fold-safe-top: 0.35rem;
+            --fold-safe-bottom: 0.85rem;
         }
 
         body {
             background: var(--cream);
             color: var(--charcoal);
-            font-family: var(--font-sans);
+            font-family: var(--font-letter);
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
@@ -127,6 +132,7 @@
         }
 
         .landing__sub {
+            font-family: var(--font-sans);
             font-size: 1rem;
             letter-spacing: 2px;
             color: var(--warm-red);
@@ -336,7 +342,7 @@
                 radial-gradient(circle at 20% 30%, rgba(255, 240, 230, 0.5) 0%, transparent 40%),
                 repeating-linear-gradient(45deg, rgba(200, 180, 160, 0.02) 0px, rgba(200, 180, 160, 0.02) 2px, transparent 2px, transparent 8px);
             border-radius: 0 0 16px 16px;
-            padding: 2rem 1.8rem 1.6rem;
+            padding: 2rem 1.9rem 1.75rem;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.02);
             margin-top: -35%;
             transform: translateY(30px) scale(0.98);
@@ -349,6 +355,7 @@
             display: flex;
             flex-direction: column;
             pointer-events: none;
+            overflow: visible;
         }
 
         .letter-paper--visible {
@@ -383,33 +390,40 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 0.35rem 0.9rem;
-            font-size: 0.9rem;
+            font-size: 1.15rem;
+            line-height: 1.45;
             color: #7a5a4a;
             border-bottom: 1px dashed #ddd0c4;
             padding-bottom: 0.75rem;
             margin-bottom: 1.5rem;
-            font-family: var(--font-serif);
+            font-family: var(--font-letter);
             letter-spacing: 0.3px;
             flex-shrink: 0;
+            min-width: 0;
+            overflow-wrap: break-word;
         }
 
         /* ── FOLDING LETTER BODY ── */
         .letter-paper__body {
             font-family: var(--font-letter);
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             font-weight: 500;
-            line-height: 1.8;
+            line-height: 1.85;
             color: #2d2520;
+            overflow-wrap: break-word;
             word-wrap: break-word;
+            word-break: normal;
+            hyphens: none;
             flex: 1;
+            min-width: 0;
             perspective: 1400px;
             perspective-origin: 50% 0%;
             letter-spacing: 0.2px;
         }
 
         .letter-paper__body--long {
-            font-size: 1.3rem;
-            line-height: 1.75;
+            font-size: 1.28rem;
+            line-height: 1.8;
         }
 
         .letter-paper__body p { margin-bottom: 0; }
@@ -426,6 +440,8 @@
         .fold-inner {
             min-height: 0;
             overflow: hidden;
+            padding: var(--fold-safe-top) var(--fold-safe-x) var(--fold-safe-bottom);
+            margin: calc(var(--fold-safe-top) * -1) calc(var(--fold-safe-x) * -1) calc(var(--fold-safe-bottom) * -1);
             transform-origin: top center;
             transform:
                 perspective(1200px)
@@ -450,6 +466,7 @@
         .word {
             opacity: 0;
             display: inline;
+            overflow-wrap: break-word;
             transition: opacity 0.4s ease;
             transition-delay: var(--word-delay-out, 0ms);
             will-change: opacity;
@@ -461,20 +478,18 @@
             transition-delay: var(--word-delay, 0ms);
         }
 
-        /* ── SIGNATURE ──
-           The fade-in delay is driven by --sign-delay, set inline by
-           the JS to exactly match the paragraph's full word cascade.
-           So "— Your Name" only starts appearing once every word of
-           the final paragraph has finished. */
+        /* ── SIGNATURE ── */
         .letter-paper__sign {
             margin-top: 1.5rem;
             text-align: right;
             font-family: var(--font-letter);
             font-style: italic;
-            font-size: 1.55rem;
+            font-size: 1.5rem;
             font-weight: 600;
+            line-height: 1.5;
             color: var(--warm-red);
             padding-top: 0.7rem;
+            padding-right: 0.15rem;
             border-top: 1px solid rgba(220, 200, 180, 0.35);
 
             opacity: 0;
@@ -490,7 +505,7 @@
 
         .fold-line {
             height: 2px;
-            margin: 1.1rem 0 1.35rem;
+            margin: 1.05rem 0 1.25rem;
             background: linear-gradient(
                 to bottom,
                 transparent,
@@ -531,7 +546,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: var(--font-sans);
+            font-family: var(--font-letter);
             transition: background 0.2s ease, transform 0.15s ease, opacity 0.3s ease;
         }
 
@@ -593,7 +608,7 @@
         }
 
         .section-title {
-            font-family: var(--font-serif);
+            font-family: var(--font-letter);
             font-size: 1.6rem;
             text-align: center;
             color: var(--warm-red);
@@ -616,7 +631,7 @@
         }
 
         .reason-box__text {
-            font-family: var(--font-serif);
+            font-family: var(--font-letter);
             font-size: 1.4rem;
             line-height: 1.6;
             min-height: 5rem;
@@ -645,7 +660,7 @@
             font-weight: 500;
             cursor: pointer;
             transition: background 0.15s, border-color 0.15s;
-            font-family: var(--font-sans);
+            font-family: var(--font-letter);
         }
 
         .btn-ghost:hover,
@@ -681,7 +696,7 @@
         }
 
         .secret-message {
-            font-family: var(--font-serif);
+            font-family: var(--font-letter);
             font-size: 1.15rem;
             line-height: 1.7;
             color: var(--warm-red);
@@ -735,7 +750,7 @@
             font-weight: 500;
             cursor: pointer;
             transition: background 0.15s, color 0.15s;
-            font-family: var(--font-sans);
+            font-family: var(--font-letter);
         }
 
         .btn-restart:hover,
@@ -760,10 +775,10 @@
             .section-title { font-size: 1.3rem; }
             .reason-box__text { font-size: 1.1rem; padding: 0 0.75rem; }
             .reason-box { padding: 1.5rem 1rem; }
-            .letter-paper { margin-top: -28%; padding: 1.5rem 1.2rem 1.2rem; }
-            .letter-paper__body { font-size: 1.25rem; line-height: 1.75; }
-            .letter-paper__body--long { font-size: 1.18rem; }
-            .letter-paper__sign { font-size: 1.4rem; }
+            .letter-paper { margin-top: -28%; padding: 1.6rem 1.45rem 1.35rem; }
+            .letter-paper__body { font-size: 1.22rem; line-height: 1.8; }
+            .letter-paper__body--long { font-size: 1.15rem; }
+            .letter-paper__sign { font-size: 1.35rem; }
             .envelope-seal { width: 50px; height: 50px; font-size: 1.7rem; }
             .letter-container { padding-top: 3rem; }
             .envelope-wrapper { margin-top: 1.5rem; }
@@ -774,7 +789,7 @@
         }
 
         @media (max-width: 400px) {
-            .letter-paper { margin-top: -20%; padding: 1.2rem 1rem 1rem; }
+            .letter-paper { margin-top: -20%; padding: 1.4rem 1.25rem 1.2rem; }
             .letter-container { padding-top: 2rem; }
             .envelope-wrapper { margin-top: 1rem; }
         }
@@ -791,7 +806,7 @@
             .letter-paper {
                 max-width: 500px;
                 margin-top: -32%;
-                padding: 1.9rem 1.7rem 1.5rem;
+                padding: 1.9rem 1.85rem 1.6rem;
             }
             .section {
                 width: min(88%, 620px);
@@ -829,11 +844,11 @@
             }
             .letter-paper {
                 margin-top: -20%;
-                padding: 1.2rem 1.4rem 1rem;
+                padding: 1.2rem 1.35rem 1.05rem;
             }
             .letter-paper__body {
-                font-size: 1.2rem;
-                line-height: 1.7;
+                font-size: 1.15rem;
+                line-height: 1.75;
             }
             .letter-paper__header {
                 margin-bottom: 1rem;
@@ -849,20 +864,20 @@
 
         @media (max-width: 360px) {
             .letter-paper {
-                padding: 1.1rem 0.9rem 0.9rem;
+                padding: 1.25rem 1.05rem 1.1rem;
                 margin-top: -18%;
             }
             .letter-paper__header {
                 flex-direction: column;
                 align-items: flex-start;
-                font-size: 0.82rem;
+                font-size: 1rem;
             }
             .letter-paper__body {
-                font-size: 1.15rem;
-                line-height: 1.7;
+                font-size: 1.12rem;
+                line-height: 1.78;
             }
             .letter-paper__sign {
-                font-size: 1.25rem;
+                font-size: 1.2rem;
             }
             .btn-arrow {
                 width: 40px;
@@ -950,9 +965,9 @@
                     💌
                 </button>
                 <div class="secret-message" id="secretMessage" role="status" aria-live="polite">
-                    there's one more thing I wanted to tell you<br><br>
+                    There's one more thing I wanted to tell you<br><br>
                     I didn't fall for you because of your cuteness.<br><br>
-                    i fell for you because somehow, being around you started feeling special to me.
+                    I fell for you because I saw and felt something special in you.
                 </div>
             </section>
 
@@ -1029,26 +1044,23 @@ I don't know what comes next, Elsa, but at least now you know what I've been too
 
             const FOCUS_RATIO = 0.22;
 
-            // Timing constants — MUST stay in sync with the CSS above.
-            const UNFOLD_MS            = 2000;   // --unfold-duration (paper fold)
-            const REVEAL_DELAY_MS      = 140;    // pause after fold, before scroll
-            const SCROLL_MS            = 1600;   // smooth glide duration
-            const SCROLL_SETTLE_MS     = 120;    // pause after scroll, before text
-            const TEXT_FADE_OUT_MS     = 950;    // wait for words to fully disappear
+            const UNFOLD_MS            = 2000;
+            const REVEAL_DELAY_MS      = 140;
+            const SCROLL_MS            = 1600;
+            const SCROLL_SETTLE_MS     = 120;
+            const TEXT_FADE_OUT_MS     = 950;
 
             const SECRET_MS            = 1250;
             const SECRET_SCROLL_MS     = 1000;
             const SECRET_VIEW_TOP      = 0.18;
             const TRIGGER_VIEW_TOP     = 0.30;
 
-            // Word cascade tuning
-            const WORD_STAGGER_MIN     = 20;    // ms — minimum gap between words
-            const WORD_STAGGER_MAX     = 60;    // ms — maximum gap between words
-            const WORD_CASCADE_TARGET  = 1400;  // ms — target total cascade time
-            const WORD_REVERSE_FACTOR  = 0.25;  // reverse cascade is faster
-            const WORD_FADE_MS         = 650;   // must match --word-fade-duration
+            const WORD_STAGGER_MIN     = 20;
+            const WORD_STAGGER_MAX     = 60;
+            const WORD_CASCADE_TARGET  = 1400;
+            const WORD_REVERSE_FACTOR  = 0.25;
+            const WORD_FADE_MS         = 650;
 
-            // Signature fade duration (must match the CSS for .letter-paper__sign)
             const SIGN_FADE_MS         = 900;
 
             function getSegments() {
@@ -1069,8 +1081,6 @@ I don't know what comes next, Elsa, but at least now you know what I've been too
                 buildFoldableLetter();
             }
 
-            /* Wraps every word in its own span and returns the total
-               time (ms) the paragraph's cascade will take. */
             function buildWordWrappedHtml(text) {
                 const tokens = text.split(/(\s+)/);
                 const words = tokens.filter(t => t.trim() !== '');
@@ -1119,9 +1129,6 @@ I don't know what comes next, Elsa, but at least now you know what I've been too
                     const isLast = i === paragraphs.length - 1;
                     const { html: wordsHtml, duration } = buildWordWrappedHtml(p);
 
-                    /* The signature's fade-in delay equals the paragraph's
-                       full word cascade duration, so it only begins to
-                       appear once every word has finished. */
                     const signDelay = duration;
 
                     html += `
@@ -1142,7 +1149,6 @@ I don't know what comes next, Elsa, but at least now you know what I've been too
                 updateUnfoldUI();
             }
 
-            /* Total time the paragraph's word cascade will take (ms). */
             function getTextDuration(seg) {
                 if (!seg) return 0;
                 const v = parseInt(seg.getAttribute('data-text-duration'), 10);
@@ -1234,11 +1240,6 @@ I don't know what comes next, Elsa, but at least now you know what I've been too
                 smoothScrollTo(targetY, duration);
             }
 
-            /* ── Reveal step ──
-               Forward: fold paper → scroll paper into view → fade words in
-                        → wait for the signature on the last paragraph
-                        → only then re-enable / highlight the arrows.
-               Backward: fade words out → fold paper back → scroll. */
             function revealStep(n) {
                 if (isAnimating) return;
 
@@ -1263,10 +1264,6 @@ I don't know what comes next, Elsa, but at least now you know what I've been too
                         setTimeout(() => {
                             target.classList.add('is-text-visible');
 
-                            /* On the final paragraph, the arrows stay
-                               dimmed until the signature has also faded
-                               in. On every other paragraph we only wait
-                               for the words. */
                             const wordWait = getTextDuration(target) + 260;
                             const isLast = (n === totalSteps);
                             const wait = isLast
@@ -1324,7 +1321,6 @@ I don't know what comes next, Elsa, but at least now you know what I've been too
                 }, SECRET_MS);
             }
 
-            /* ── Open envelope ── */
             function openEnvelope() {
                 if (isLetterVisible) return;
 
